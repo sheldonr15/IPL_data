@@ -40,6 +40,13 @@ def compare_wins(option1, option2):
     df_plot = pd.concat(frames)
     df_plot2 = df_plot.loc[df_plot["teams"].isin([option1, option2])]
     fig = px.line(df_plot2, x="season", y="wins", color="teams")
+    fig.update_layout(
+        xaxis = dict(
+            tickmode = 'linear',
+        )
+    )
+    fig.data[0].update(mode='markers+lines')
+    fig.data[1].update(mode='markers+lines')
     plot(fig)
 
 def bat_field(decision):
@@ -66,11 +73,21 @@ def bat_field(decision):
         
     else:
         sorted_bf = df_batfield2.loc[df_batfield2["bat/field"]==str(decision)][:11].sort_values(by="perc_of_wins", ascending=True)
-        fig  = px.bar(sorted_bf, y = "venue", x="perc_of_wins", orientation="h", opacity=0.7, labels={"venue":"Stadiums", "perc_of_wins":f"Win percentage with {decision} first"}, width=1000)
-        
+        fig  = px.bar(sorted_bf, y = "venue", x="perc_of_wins", orientation="h", opacity=0.7, labels={"venue":"Stadiums", "perc_of_wins":f"Win percentage with {decision} first"}, width=1000)       
 
     plot(fig)
+    # st.plotly_chart(fig, use_container_width=False)
 
+def win_margin():
+    high_avg_margin_runs = (df.loc[df["win_by_runs"]!=0].groupby(["winner"])["win_by_runs"].mean()).sort_values(ascending=False).reset_index()
+    high_avg_margin_wickets = (df.loc[df["win_by_wickets"]!=0].groupby(["winner"])["win_by_wickets"].mean()).sort_values(ascending=False).reset_index()
+    fig = px.line(high_avg_margin_runs, x="winner", y="win_by_runs", labels={"winner":"Teams", "win_by_runs":"Average Win Margin (Runs)"})
+    fig.data[0].update(mode='markers+lines')
+    fig2 = px.line(high_avg_margin_wickets, x="winner", y="win_by_wickets", labels={"winner":"Teams", "win_by_wickets":"Average Win Margin (Wickets)"})
+    fig2.data[0].update(mode='markers+lines')
+
+    plot(fig)
+    plot(fig2)
 
 
 def main():
@@ -110,4 +127,8 @@ def main():
             batandfield_option = "field"
         
         bat_field(batandfield_option)
+
+    win_margin_val = st.sidebar.checkbox("Teams with highest win margins in runs / wickets")
+    if win_margin_val is True:
+        win_margin()
 

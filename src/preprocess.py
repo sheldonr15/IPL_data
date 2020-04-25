@@ -6,6 +6,7 @@ from datetime import datetime
 def load_dataset():
     # df = pd.DataFrame(data, columns=headers)
     df = pd.read_csv("data/matches.csv")
+    
     df["date"] = pd.to_datetime(df["date"])
     df["city"] = df["city"].fillna("Dubai")
     df["team1"] = df["team1"].replace("Rising Pune Supergiants", "Rising Pune Supergiant")
