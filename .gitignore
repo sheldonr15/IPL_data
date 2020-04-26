@@ -147,5 +147,5 @@ dmypy.json
 # *.png
 
 notebooks/sheets.py
-src/sheets.py
+sheets.py
 creds.json
