@@ -1,11 +1,11 @@
-# from .sheets import data, headers
-# import sheets
+from .sheets import data, headers
+import sheets
 import pandas as pd
 from datetime import datetime
 
 def load_dataset():
-    # df = pd.DataFrame(data, columns=headers)
-    df = pd.read_csv("data/matches.csv")
+    df = pd.DataFrame(data, columns=headers)
+    # df = pd.read_csv("data/matches.csv")
     
     df["date"] = pd.to_datetime(df["date"])
     df["city"] = df["city"].fillna("Dubai")
