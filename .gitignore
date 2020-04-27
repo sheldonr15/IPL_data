@@ -146,7 +146,5 @@ dmypy.json
 # *.jpg
 # *.png
 
-
-sheets.py
 creds.json
-data/matches.csv
+
