@@ -149,3 +149,4 @@ dmypy.json
 creds.json
 data/matches.csv
 src/sheets.py
+/notebooks/*

@@ -1,6 +1,6 @@
 import pandas as pd
 import plotly.express as px
-from .preprocess import df, team_city
+from src.preprocess import df, team_city
 import streamlit as st
 
 
@@ -89,6 +89,53 @@ def win_margin():
     plot(fig)
     plot(fig2)
 
+def streak():
+    df_final = df_plot = pd.DataFrame(columns = ["season", "team", "streak"])
+
+    for year in range(df["season"].min(), (df["season"].max())+1):
+        team_list = list(df.loc[df["season"]==year, "team1"].unique())
+        plot_dict = {}
+
+        for team in team_list:
+            df_filter_team = df.loc[df["season"]==year][(df["team1"]==str(team)) | (df["team2"]==str(team))]
+            df_filter_team.sort_values(by="date", inplace=True)
+
+            groups = df_filter_team["winner"].ne(df_filter_team["winner"].shift()).cumsum()
+            df_agg = (   df_filter_team.groupby(groups,sort=False).agg(winner=('winner','first'),
+                                                                       length=('winner','size'))
+                        .sort_values('length',ascending=False)
+                        .drop_duplicates('winner')
+                      )
+            value = df_agg.loc[df_agg["winner"]==str(team), "length"].iloc[0]
+
+            plot_dict[team] = value
+
+        key_max = max(plot_dict.keys(), key=(lambda k: plot_dict[k]))
+
+        dict_to_df = {}
+        data = []
+        for team in plot_dict:
+            if plot_dict[team] == plot_dict[key_max]:
+                dict_to_df["season"] = year
+                dict_to_df["team"] = team
+                dict_to_df["streak"] = plot_dict[team]
+                data.append(dict_to_df)
+                df_plot = df_plot.append(data, True)
+
+        df_final = pd.concat([df_final, df_plot])
+
+    df_final.drop_duplicates(inplace=True)
+    df_final.reset_index(inplace=True, drop=True)
+    
+    fig = px.bar(df_final, x="season", y="streak", color="team", barmode='group', height=400, 
+                 labels = {"season":"Season", "streak":"Duration on streak (in games)"})
+    fig.update_layout(
+        xaxis = dict(
+            tickmode = 'linear',
+        )
+    )
+    fig.show()
+
 
 def main():
     st.sidebar.title("MENU")
@@ -132,3 +179,6 @@ def main():
     if win_margin_val is True:
         win_margin()
 
+    streak_val = st.sidebar.checkbox("Longest winning streak per season")
+    if streak_val is True:
+        streak()
