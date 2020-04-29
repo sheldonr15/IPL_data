@@ -134,7 +134,7 @@ def streak():
             tickmode = 'linear',
         )
     )
-    fig.show()
+    plot(fig)
 
 
 def main():
