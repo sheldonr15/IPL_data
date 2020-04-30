@@ -128,7 +128,7 @@ def streak():
     df_final.reset_index(inplace=True, drop=True)
     
     fig = px.bar(df_final, x="season", y="streak", color="team", barmode='group', height=400, 
-                 labels = {"season":"Season", "streak":"Duration on streak (in games)"})
+                 labels = {"season":"Season", "streak":"Duration of streak (in number of games)"})
     fig.update_layout(
         xaxis = dict(
             tickmode = 'linear',
@@ -141,7 +141,7 @@ def main():
     st.sidebar.title("MENU")
     home_val = st.sidebar.checkbox("Most Wins on Homeground")
     if home_val is True:
-        st.header("Most Wins Per Season")
+        st.header("Most Homeground Wins Per Season")
         year_home_win = st.slider(
             label="Select Year",
             min_value=int(df["season"].min()),
@@ -153,7 +153,7 @@ def main():
         st.header("Most Homeground Wins in all seasons ( 2008 - 2019 )")
         most_home_wins(df, 0)
 
-    compare_val = st.sidebar.checkbox("Compare Wins Per Team")
+    compare_val = st.sidebar.checkbox("Compare Team Wins Per Season")
     if compare_val is True:
         option1 = st.selectbox("Select Team 1", pd.unique(df["team1"]))
         option2 = st.selectbox("Select Team 2", pd.unique(df["team1"].loc[df["team1"]!=option1]))
@@ -165,10 +165,10 @@ def main():
         st.subheader("Win Percentage for Stadiums when batting / fielding first")
         bat_field("all")
 
-        st.subheader("Stats of stadiums with ")
+        st.subheader("[Top 10] Win percentage of stadiums with ")
         select = ["Bat First", "Field First"]
         select_option = st.selectbox("Select Bat or Field", select)
-        if select_option is "Only Bat First":
+        if select_option is "Bat First":
             batandfield_option = "bat"
         else:
             batandfield_option = "field"
