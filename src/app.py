@@ -5,9 +5,30 @@ import streamlit as st
 
 
 def plot(fig):
+    '''
+    The plot() function displays the Plotly fig within the Streamlit App.
+
+    Parameters:
+    fig (graph_objects.Figure)
+    '''
     st.plotly_chart(fig, use_container_width=True)
 
 def most_home_wins(df, year: int):
+    '''
+    This function plots [Vertical Bar Graphs] two outputs:
+    1. Numbers of wins at homeground(both primary and secondary homeground) for each team per season. It then orders
+    it in descending order.
+
+    2. Numbers of wins at homeground(both primary and secondary homeground) for each team in all seasons. It then orders
+    it in descending order.
+
+    Parameters:
+    df (DataFrame) : Pass DataFrame for which you want to compute the homeground wins
+    year (int) : Year / season for which you want the homegrounds wins values. year = 0 for all seasons.
+
+    Returns:
+    '''
+
     df4all = df[["id", "season", "city", "winner"]]
     df4all["TF"] = 0
     for index, row in df4all.iterrows():
@@ -28,6 +49,16 @@ def most_home_wins(df, year: int):
         plot(fig)
 
 def compare_wins(option1, option2):
+    '''
+    This function plots line graph for comparison between two distinct teams on the basis of their wins per season. 
+
+    Parameters:
+    option1 (String) : First team name to be used for comparison of wins.
+    option2 (String) : Second team name to be used for comparison of wins.
+
+    Returns:
+    '''
+
     def wps(year):
         df_year = df["winner"].loc[df["season"]==year].value_counts().rename_axis('teams').reset_index(name='wins')
         df_year["season"] = year
@@ -50,6 +81,17 @@ def compare_wins(option1, option2):
     plot(fig)
 
 def bat_field(decision):
+    '''
+    This function plots two types of graphs based on the Arguments.
+    1. If input is "all", plots a horizontal bar graph with each bat AND field first win percentage for all stadiums. 
+    2. If input is "bat" or "field", plots a horizontal bar graph with Top 10 'bat first' OR 'field first' win percentage for the stadiums. 
+
+    Parameters:
+    decision (String) : Accepted values --> "all", "bat" or "fields". 
+
+    Returns:
+    '''
+
     df["bat/field"] = "NO"
     df.loc[(df["toss_winner"] == df["winner"]) & (df["toss_decision"] == "bat"), "bat/field"] = "bat"
     df.loc[(df["toss_winner"] == df["winner"]) & (df["toss_decision"] == "field"), "bat/field"] = "field"
@@ -76,9 +118,18 @@ def bat_field(decision):
         fig  = px.bar(sorted_bf, y = "venue", x="perc_of_wins", orientation="h", opacity=0.7, labels={"venue":"Stadiums", "perc_of_wins":f"Win percentage with {decision} first"}, width=1000)       
 
     plot(fig)
-    # st.plotly_chart(fig, use_container_width=False)
 
 def win_margin():
+    '''
+    This function plots two line graphs:
+    1. Highest win margins in terms of 'Runs' in a descending order for all teams. [For all seasons] 
+    1. Highest win margins in terms of 'Wickets' in a descending order for all teams. [For all seasons] 
+
+    Parameters:
+
+    Returns:
+    '''
+
     high_avg_margin_runs = (df.loc[df["win_by_runs"]!=0].groupby(["winner"])["win_by_runs"].mean()).sort_values(ascending=False).reset_index()
     high_avg_margin_wickets = (df.loc[df["win_by_wickets"]!=0].groupby(["winner"])["win_by_wickets"].mean()).sort_values(ascending=False).reset_index()
     fig = px.line(high_avg_margin_runs, x="winner", y="win_by_runs", labels={"winner":"Teams", "win_by_runs":"Average Win Margin (Runs)"})
@@ -90,6 +141,14 @@ def win_margin():
     plot(fig2)
 
 def streak():
+    '''
+    This functions plots [Vertical Bar Graph] displaying longest winning streak for all seasons.
+    If multiple teams have the same number of maximum winning streak, it displays them both under the same season.
+
+    Parameters:
+
+    Returns:
+    '''
     df_final = df_plot = pd.DataFrame(columns = ["season", "team", "streak"])
 
     for year in range(df["season"].min(), (df["season"].max())+1):
