@@ -149,4 +149,3 @@ dmypy.json
 creds.json
 data/
 src/sheets.py
-/notebooks/*
