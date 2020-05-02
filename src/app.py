@@ -42,7 +42,7 @@ def most_home_wins(df, year: int):
         fig = px.bar(df_plot3, x="winner", y="TF", hover_data=["TF"], labels={"winner": "Team", "TF":f"Number of wins at homeground in {year}"}) 
         plot(fig) 
     elif year==2009:
-        st.write("No homeground matches since games weren't held in India")              
+        st.markdown("_No homeground matches since games weren't held in India_")              
     else:
         df_plot = df_final.groupby(["winner"])["TF"].count().reset_index().sort_values(by=["TF"], ascending=False)
         fig = px.bar(df_plot, x="winner", y="TF", hover_data=["TF"], labels={"winner": "Team", "TF":"Number of wins at homeground"})
@@ -137,7 +137,9 @@ def win_margin():
     fig2 = px.line(high_avg_margin_wickets, x="winner", y="win_by_wickets", labels={"winner":"Teams", "win_by_wickets":"Average Win Margin (Wickets)"})
     fig2.data[0].update(mode='markers+lines')
 
+    st.subheader("Highest Average Win Margin in terms of RUNS")
     plot(fig)
+    st.subheader("Highest Average Win Margin in terms of WICKETS")
     plot(fig2)
 
 def streak():
@@ -193,11 +195,14 @@ def streak():
             tickmode = 'linear',
         )
     )
+
+    st.subheader("This plot details the teams with the longest winning streak for each season.")
+    st.markdown("_Maximise the graph to view it completely._")
     plot(fig)
 
 
 def main():
-    st.sidebar.title("MENU")
+    st.sidebar.header("Check one or multiple boxes to view the corresponding plots.")
     home_val = st.sidebar.checkbox("Most Wins on Homeground")
     if home_val is True:
         st.header("Most Homeground Wins Per Season")
@@ -206,7 +211,7 @@ def main():
             min_value=int(df["season"].min()),
             max_value=int(df["season"].max()),
         )
-        st.header(f"Most Homeground Wins in the year {year_home_win}")
+        st.subheader(f"Most Homeground Wins in the year {year_home_win}")
         most_home_wins(df, year_home_win)
 
         st.header("Most Homeground Wins in all seasons ( 2008 - 2019 )")
@@ -222,15 +227,18 @@ def main():
     batandfield_val = st.sidebar.checkbox("Stadiums preferring Bat first or Field first")
     if batandfield_val is True:
         st.subheader("Win Percentage for Stadiums when batting / fielding first")
+        st.markdown("_Maximise the graph to view it completely._")
         bat_field("all")
 
-        st.subheader("[Top 10] Win percentage of stadiums with ")
+        st.subheader("Win percentage of stadiums with ")
         select = ["Bat First", "Field First"]
-        select_option = st.selectbox("Select Bat or Field", select)
+        select_option = st.selectbox("", select)
         if select_option is "Bat First":
             batandfield_option = "bat"
         else:
             batandfield_option = "field"
+        
+        st.markdown("**_Here, the Top 10 stadiums with the highest win percentage are displayed._** _Maximise the graph to view it completely._ ")
         
         bat_field(batandfield_option)
 
