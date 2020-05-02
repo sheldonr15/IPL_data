@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 
 - For instructions on using Google Sheets as a source for your dataset using the Sheets API refer to this [video](https://www.youtube.com/watch?v=cnPlKLEGR7E).
-Include your `creds.json` file in the main porject directory alongside `sheets.py`.
+Include your `creds.json` file in the main project directory alongside `sheets.py`.
 
 ### Setup:
 - #### Streamlit
