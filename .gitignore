@@ -146,6 +146,6 @@ dmypy.json
 # *.jpg
 # *.png
 
-
+creds.json
 data/
 src/sheets.py
