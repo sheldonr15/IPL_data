@@ -4,7 +4,7 @@ Also, creating a dashboard using Streamlit app and deploying the app on Heroku.
 
 The dataset has been taken from [Kaggle - matches.csv.](https://www.kaggle.com/manasgarg/ipl#matches.csv)
 
-The Streamlit Dashboard deployed can be found on this [LINK.](https://pacific-ocean-80522.herokuapp.com/)
+The Streamlit Dashboard deployed can be found on this [LINK.]( https://vast-garden-60234.herokuapp.com/)
 -----------------------------
 Use the checkboxes to view its respective sections.
 
